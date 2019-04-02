@@ -1,0 +1,30 @@
+{
+  "name": "klotho",
+  "version": "0.0.0",
+  "description": "Bring template and graph resolution to your literal objects",
+  "main": "lib/index.js",
+  "author": "David Worms <david@adaltas.com>",
+  "dependencies": {
+    "handlebars": "^4.1.1"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.4.0",
+    "mocha": "~6.0.2",
+    "should": "^13.2.3"
+  },
+  "files": [
+    "/lib"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "preversion": "grep '## Trunk' CHANGELOG.md && npm test",
+    "version": "version=`grep '^  \"version\": ' package.json | sed 's/.*\"\\([0-9\\.]*\\)\".*/\\1/'` && sed -i \"s/## Trunk/## Version $version/\" CHANGELOG.md && git add CHANGELOG.md",
+    "postversion": "git push && git push --tags && npm publish",
+    "patch": "npm version patch -m 'Bump to version %s'",
+    "minor": "npm version minor -m 'Bump to version %s'",
+    "major": "npm version major -m 'Bump to version %s'",
+    "coffee": "coffee -b -o lib src",
+    "pretest": "coffee -b -o lib src",
+    "test": "mocha test/*.coffee"
+  }
+}
