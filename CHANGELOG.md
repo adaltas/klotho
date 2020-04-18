@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* types: get multiple value types
+
 ## Version 0.0.2
 
 * src: use mixme

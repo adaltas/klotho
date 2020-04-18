@@ -17,6 +17,33 @@ describe 'test', ->
         parent: key_assert: '{{key_inject}}'
       .parent.key_assert.should.eql 'value inject'
 
+    it 'value of various types', ->
+      templated
+        templates:
+          a_boolean_true: '{{values.a_boolean_true}}'
+          a_boolean_false: '{{values.a_boolean_false}}'
+          a_number: '{{values.a_number}}'
+          a_null: '{{values.a_null}}'
+          an_object: '{{{values.an_object}}}'
+          a_string: '{{values.a_string}}'
+          an_undefined: '{{values.an_undefined}}'
+        values:
+          a_boolean_true: true
+          a_boolean_false: false
+          a_number: 3.14
+          a_null: null
+          an_object: {a: 'b', toString: -> JSON.stringify @}
+          a_string: 'a string'
+          an_undefined: undefined
+      .templates.should.eql
+        a_string: 'a string'
+        a_boolean_true: 'true'
+        a_boolean_false: 'false'
+        a_number: '3.14'
+        a_null: ''
+        an_object: '{"a":"b"}'
+        an_undefined: ''
+
   describe 'inject', ->
 
     it 'parent level', ->
