@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* src: use mixme
 * project: coffeelint
 * project: rename to self-templated
 

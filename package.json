@@ -18,7 +18,8 @@
     }
   },
   "dependencies": {
-    "handlebars": "^4.1.1"
+    "handlebars": "^4.1.1",
+    "mixme": "^0.3.5"
   },
   "devDependencies": {
     "coffeescript": "^2.4.0",

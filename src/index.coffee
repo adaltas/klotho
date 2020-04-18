@@ -1,5 +1,6 @@
 
 handlebars = require 'handlebars'
+{is_object_literal} = require 'mixme'
 
 module.exports = (context, options = {}) ->
   # Default templated engine
@@ -32,13 +33,11 @@ module.exports = (context, options = {}) ->
       if i < keys.length - 1
       then search = search[key]
       else search[key] = value
-  is_object = (obj) ->
-    obj and typeof obj is 'object' and not Array.isArray obj
   # Recursively convert our context to proxies
   proxify = (obj, keys) ->
     proxies = []
     for k, v of obj
-      proxies[k] = proxify v, [keys..., k] if is_object v
+      proxies[k] = proxify v, [keys..., k] if is_object_literal v
     proxy = new Proxy obj,
       get: (target, name, receiver) ->
         if value = _get [keys..., name]
