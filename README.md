@@ -1,12 +1,12 @@
 [![Build Status](https://secure.travis-ci.org/adaltas/node-templated-object.png)][travis]
 
-# Node.js Klotho
+# Node.js Self Templated project
 
-Klotho brings the power of templating to your literal object with a graph resolution of the references. It traverse an object recursively and use the same self-referenced object as a context. It is entirely agnostic of the templating engine being used and default to [Handlebars](https://handlebarsjs.com/).
+Self Templated brings the power of templating to your literal object with a graph resolution of the references. It traverses an object recursively and use the same self-referenced object as a context. It is entirely agnostic of the templating engine being used and default to [Handlebars](https://handlebarsjs.com/).
 
 If this is not clear, imagine a templating engine rendering all the string of an object and inject that same object as a context.
 
-If this is still not clear, imagine a configuration where each value can referenced other values from that same configuratioon, see the example below.
+If this is still not clear, imagine a configuration where each value can referenced other values from that same configuration, see the example below.
 
 If you have understood but a more sarrow introduction would have helped, please [share your suggestions](https://github.com/adaltas/node-templated-object/edit/master/README.md).
 

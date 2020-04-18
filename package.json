@@ -1,5 +1,5 @@
 {
-  "name": "klotho",
+  "name": "self-templated",
   "version": "0.0.1",
   "description": "Bring template and graph resolution to your literal objects",
   "main": "lib/index.js",
