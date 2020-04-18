@@ -4,6 +4,19 @@
   "description": "Bring template and graph resolution to your literal objects",
   "main": "lib/index.js",
   "author": "David Worms <david@adaltas.com>",
+  "coffeelintConfig": {
+    "indentation": {
+      "level": "error",
+      "value": 2
+    },
+    "line_endings": {
+      "level": "error",
+      "value": "unix"
+    },
+    "max_line_length": {
+      "level": "ignore"
+    }
+  },
   "dependencies": {
     "handlebars": "^4.1.1"
   },

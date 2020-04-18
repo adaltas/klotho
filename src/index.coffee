@@ -17,7 +17,7 @@ module.exports = (context, options = {}) ->
     return null unless typeof value is 'string'
     keys_as_string = JSON.stringify(keys)
     # Update context with new value if not already visited
-    unless keys_as_string in visits 
+    unless keys_as_string in visits
       if keys_as_string in visiting
         throw Error "Circular Reference: graph is #{[visiting..., [visiting[0]]].join ' -> '}"
       visiting.push keys_as_string
