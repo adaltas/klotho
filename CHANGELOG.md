@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.0.2
 
 * src: use mixme
 * project: coffeelint
