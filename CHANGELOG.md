@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.0.3
 
 * partial: new option
 * types: get multiple value types

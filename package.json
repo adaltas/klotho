@@ -1,6 +1,6 @@
 {
   "name": "self-templated",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Bring template and graph resolution to your literal objects",
   "main": "lib/index.js",
   "author": "David Worms <david@adaltas.com>",
