@@ -7,6 +7,7 @@ module.exports = (context, options = {}) ->
   options.render ?= (source, proxy) ->
     template = handlebars.compile source
     template proxy, options.handlebars
+  options.partial ?= undefined
   # Tracking graph traversal
   visits = []
   visiting = []
@@ -15,8 +16,14 @@ module.exports = (context, options = {}) ->
     value = context
     for key, i in keys
       value = value[key]
-    return null if is_object_literal value
-    return value unless typeof value is 'string'
+    value
+  _set = (keys, value) ->
+    search = context
+    for key, i in keys
+      if i < keys.length - 1
+      then search = search[key]
+      else search[key] = value
+  _render = (keys, value) ->
     keys_as_string = JSON.stringify(keys)
     # Update context with new value if not already visited
     unless keys_as_string in visits
@@ -28,33 +35,37 @@ module.exports = (context, options = {}) ->
       _set keys, value
       visits.push keys_as_string
     value
-  _set = (keys, value) ->
-    search = context
-    for key, i in keys
-      if i < keys.length - 1
-      then search = search[key]
-      else search[key] = value
   # Clone the context by recursively converting it into proxies
-  proxify = (obj, keys) ->
-    proxies = []
-    for k, v of obj
-      continue unless is_object_literal v
-      proxies[k] = proxify v, [keys..., k]
+  proxify = (obj, keys, partial) ->
+    proxies = {}
+    for key, value of obj
+      continue unless is_object_literal value
+      continue if partial? and not partial[key]
+      proxies[key] = proxify value, [keys..., key], (
+        if partial? and is_object_literal partial[key] then partial[key] else undefined
+      )
     new Proxy obj,
-      get: (target, name, receiver) ->
-        value = _get [keys..., name]
-        if value?
-        then value
-        else proxies[name]
-  proxy = proxify context, []
+      get: (target, key, receiver) ->
+        return _get [keys..., key] if partial? and not partial[key]
+        value = _get [keys..., key]
+        if is_object_literal value
+          proxies[key]
+        else if typeof value is 'string'
+          _render [keys..., key], value
+        else
+          value
+  proxy = proxify context, [], options.partial
   # Trigger templating on every properties
-  init = (search, keys) ->
+  init = (search, keys, partial) ->
     for key, value of search
-      # Value is a string, thus a template
+      continue if partial? and not partial[key]
+      # String interpreted as a template
       if typeof value is 'string'
-        _get [keys..., key]
+        _render [keys..., key], value
       else
-        init search[key], [keys..., key]
-  init context, []
+        init search[key], [keys..., key], (
+          if partial? and is_object_literal partial[key] then partial[key] else undefined
+        )
+  init context, [], options.partial if options.compile
   # Return the result
-  context
+  proxy

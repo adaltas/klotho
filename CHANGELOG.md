@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* partial: new option
 * types: get multiple value types
 
 ## Version 0.0.2

@@ -35,10 +35,12 @@ first argument and optionally an `options` object as second argument.
 
 Options includes:
 
-* `render` (function)   
-  A user defined function responsible to render a template. Argments are the template and the context, expect to returned the rendered result. Default implementation is using [HandleBars](http://handlebarsjs.com).
 * `handlebars` (object)   
   Options passed to HandleBars.
+* `partial` ([string])   
+  Filtering the templating to a restricuted list of properties.
+* `render` (function)   
+  A user defined function responsible to render a template. Argments are the template and the context, expect to returned the rendered result. Default implementation is using [HandleBars](http://handlebarsjs.com).
 
 ## Examples
 

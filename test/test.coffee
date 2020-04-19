@@ -1,5 +1,6 @@
 
 templated = require '../src'
+{merge} = require 'mixme'
 
 describe 'test', ->
   
@@ -18,7 +19,7 @@ describe 'test', ->
       .parent.key_assert.should.eql 'value inject'
 
     it 'value of various types', ->
-      templated
+      res = templated
         templates:
           a_boolean_true: '{{values.a_boolean_true}}'
           a_boolean_false: '{{values.a_boolean_false}}'
@@ -35,6 +36,7 @@ describe 'test', ->
           an_object: {a: 'b', toString: -> JSON.stringify @}
           a_string: 'a string'
           an_undefined: undefined
+      , compile: true
       .templates.should.eql
         a_string: 'a string'
         a_boolean_true: 'true'
@@ -60,7 +62,7 @@ describe 'test', ->
         parent_2: key_2: 'value 2'
       .key_assert.should.eql 'value 1, value 2'
     
-    it 'idirect references', ->
+    it 'indirect references', ->
       templated
         key_assert: '{{level_parent_1.level_key_1}}'
         level_parent_1: level_key_1: 'value 1, {{level_parent_2.level_key_2}}'
@@ -75,7 +77,7 @@ describe 'test', ->
         templated
           key_1: '{{key_2}}'
           key_2: '{{key_1}}'
-        .key_assert.should.eql 'value 1, value 2'
+        .key_1
       ).should.throw 'Circular Reference: graph is ["key_1"] -> ["key_2"] -> ["key_1"]'
         
     it 'indirect circular references', ->
@@ -84,6 +86,50 @@ describe 'test', ->
           key_1: '{{key_2}}'
           key_pivot: '{{key_1}}'
           key_2: '{{key_pivot}}'
-        .key_assert.should.eql 'value 1, value 2'
+        .key_1
       ).should.throw 'Circular Reference: graph is ["key_1"] -> ["key_2"] -> ["key_pivot"] -> ["key_1"]'
+
+  describe 'option partial', ->
+        
+    it 'root', ->
+      context = templated
+        key_1: 'value 1, {{key_3}}'
+        key_2: 'value 2, {{key_3}}'
+        key_3: 'value 3, {{key_4}}'
+        key_4: 'value 4'
+      , partial: key_1: true
+      context.key_1.should.eql 'value 1, value 3, {{key_4}}'
+      context.key_2.should.eql 'value 2, {{key_3}}'
+            
+    it 'child', ->
+      context = templated
+        parent:
+          key_1: 'value 1, {{key_3}}'
+          key_2: 'value 2, {{key_3}}'
+        key_3: 'value 3, {{key_4}}'
+        key_4: 'value 4'
+      , partial: parent: key_1: true
+      context.parent.key_1.should.eql 'value 1, value 3, {{key_4}}'
+      context.parent.key_2.should.eql 'value 2, {{key_3}}'
+            
+    it 'cascade in child', ->
+      context = templated
+        parent:
+          child: key_1: 'value 1, {{key_3}}'
+          key_2: 'value 2, {{key_3}}'
+        key_3: 'value 3, {{key_4}}'
+        key_4: 'value 4'
+      , partial: parent: child: true
+      context.parent.child.key_1.should.eql 'value 1, value 3, {{key_4}}'
+      context.parent.key_2.should.eql 'value 2, {{key_3}}'
+            
+    it 'with compile', ->
+      context = templated
+        parent: key_1: 'value 1, {{key_3}}'
+        key_2: 'value 2, {{key_3}}'
+        key_3: 'value 3, {{key_4}}'
+        key_4: 'value 4'
+      , compile: true, partial: parent: key_1: true
+      context.parent.key_1.should.eql 'value 1, value 3, {{key_4}}'
+      context.key_2.should.eql 'value 2, {{key_3}}'
       
