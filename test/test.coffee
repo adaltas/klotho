@@ -46,6 +46,17 @@ describe 'test', ->
         an_object: '{"a":"b"}'
         an_undefined: ''
 
+  describe 'proxy', ->
+    
+    it 'set then retrieve values', ->
+      # Note we used to have a bug where getting an object will result to 
+      # undefined after it was set
+      obj = templated {toto: {}}
+      obj.a_string = 'a value'
+      obj.an_object = {}
+      obj.a_string.should.eql 'a value'
+      obj.an_object.should.eql {}
+
   describe 'inject', ->
 
     it 'parent level', ->

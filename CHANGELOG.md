@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Trunk
+
+* proxy: enrich with new property objects
+
 ## Version 0.0.3
 
 * partial: new option

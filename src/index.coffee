@@ -45,7 +45,7 @@ module.exports = (context, options = {}) ->
         if partial? and is_object_literal partial[key] then partial[key] else undefined
       )
     new Proxy obj,
-      get: (target, key, receiver) ->
+      get: (target, key) ->
         return _get [keys..., key] if partial? and not partial[key]
         value = _get [keys..., key]
         if is_object_literal value
@@ -54,6 +54,10 @@ module.exports = (context, options = {}) ->
           _render [keys..., key], value
         else
           value
+      # Returned object if modified after being proxyfied
+      set: (target, key, value) ->
+        proxies[key] = value
+        target[key] = value
   proxy = proxify context, [], options.partial
   # Trigger templating on every properties
   init = (search, keys, partial) ->
