@@ -1,7 +1,7 @@
 
 # Changelog
 
-## Trunk
+## Version 0.0.4
 
 * proxy: enrich with new property objects
 
