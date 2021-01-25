@@ -23,6 +23,7 @@ module.exports = (context, options = {}) ->
       if i < keys.length - 1
       then search = search[key]
       else search[key] = value
+  # Render a template, the resulting `value` is placed in `keys`
   _render = (keys, value) ->
     keys_as_string = JSON.stringify(keys)
     # Update context with new value if not already visited
@@ -39,15 +40,17 @@ module.exports = (context, options = {}) ->
   proxify = (obj, keys, partial) ->
     proxies = {}
     for key, value of obj
-      continue unless is_object_literal value
       continue if partial? and not partial[key]
+      continue unless is_object_literal value
       proxies[key] = proxify value, [keys..., key], (
         if partial? and is_object_literal partial[key] then partial[key] else undefined
       )
     new Proxy obj,
       get: (target, key) ->
-        return _get [keys..., key] if partial? and not partial[key]
+        # Retrieve the value from context
         value = _get [keys..., key]
+        # Return value without rendering if key is filtered by partial
+        return value if partial? and not partial[key]
         if is_object_literal value
           proxies[key]
         else if typeof value is 'string'
@@ -67,6 +70,9 @@ module.exports = (context, options = {}) ->
       if typeof value is 'string'
         _render [keys..., key], value
       else
+        # Note, array goes here as well and call `init` with the full array
+        # init then loop through the array with `for` resulting
+        # in the key as the index converted to a string
         init search[key], [keys..., key], (
           if partial? and is_object_literal partial[key] then partial[key] else undefined
         )
