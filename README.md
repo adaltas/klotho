@@ -35,12 +35,16 @@ first argument and optionally an `options` object as second argument.
 
 Options includes:
 
+* `array` (boolean)   
+  Proxify array as well, default is `false`
 * `compile` (boolean)   
   Resolve all the template on creation instead of on-demand, default is `false`.
 * `handlebars` (object)   
   Options passed to HandleBars.
-* `partial` ([string])   
-  Filtering the templating to a restricuted list of properties.
+* `partial` (object)   
+  Filtering the templating to a restricuted list of properties. It is an object
+  where keys can be properties or indexes and values activate or desactivate
+  the template rendering.
 * `render` (function)   
   A user defined function responsible to render a template. Argments are the template and the context, expect to returned the rendered result. Default implementation is using [HandleBars](http://handlebarsjs.com).
 

@@ -8,6 +8,7 @@ module.exports = (context, options = {}) ->
     template = handlebars.compile source
     template proxy, options.handlebars
   options.partial ?= undefined
+  # options.array ?= false
   # Tracking graph traversal
   visits = []
   visiting = []
@@ -37,21 +38,35 @@ module.exports = (context, options = {}) ->
       visits.push keys_as_string
     value
   # Clone the context by recursively converting it into proxies
-  proxify = (obj, keys, partial) ->
-    proxies = {}
-    for key, value of obj
-      continue if partial? and not partial[key]
-      continue unless is_object_literal value
-      proxies[key] = proxify value, [keys..., key], (
-        if partial? and is_object_literal partial[key] then partial[key] else undefined
-      )
-    new Proxy obj,
+  proxify = (source, keys, partial) ->
+    proxies
+    if (Array.isArray(source) and options.array) or is_object_literal source
+      # We can both store properties and indexes
+      # This is the same as `proxies = []`
+      proxies = {}
+      # Note, we can both traverse object and array
+      # this is the same as `for value, index in array`
+      for key, value of source
+        continue if partial? and not partial[key]
+        if Array.isArray(value) and options.array
+          proxies[key] = proxify value, [keys..., key], (
+            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+          )
+        else if is_object_literal value
+          proxies[key] = proxify value, [keys..., key], (
+            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+          )
+    else
+      throw Error 'Unsupported'
+    new Proxy source,
       get: (target, key) ->
         # Retrieve the value from context
         value = _get [keys..., key]
         # Return value without rendering if key is filtered by partial
         return value if partial? and not partial[key]
-        if is_object_literal value
+        if Array.isArray(value) and options.array
+          proxies[key]
+        else if is_object_literal value
           proxies[key]
         else if typeof value is 'string'
           _render [keys..., key], value

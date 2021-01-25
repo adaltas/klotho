@@ -123,6 +123,20 @@ describe 'test', ->
       context.parent.key_1.should.eql 'value 1, value 3, {{key_4}}'
       context.parent.key_2.should.eql 'value 2, {{key_3}}'
             
+    it 'child with array index', ->
+      context = templated
+        key_1: 'value 1'
+        key_2: [
+          { key_2_1: 'value 2 1, {{key_1}}' }
+        ,
+          { key_2_2: 'value 2 2, {{key_1}}' }
+        ]
+      ,
+        partial: key_2: 1: key_2_2: true
+        array: true
+      context.key_2[0].key_2_1.should.eql 'value 2 1, {{key_1}}'
+      context.key_2[1].key_2_2.should.eql 'value 2 2, value 1'
+            
     it 'cascade in child', ->
       context = templated
         parent:
@@ -134,6 +148,20 @@ describe 'test', ->
       context.parent.child.key_1.should.eql 'value 1, value 3, {{key_4}}'
       context.parent.key_2.should.eql 'value 2, {{key_3}}'
             
+    it 'cascade in child with array index', ->
+      context = templated
+        key_1: 'value 1'
+        key_2: [
+          { key_2_1: 'value 2 1, {{key_1}}' }
+        ,
+          { key_2_2: 'value 2 2, {{key_1}}' }
+        ]
+      ,
+        partial: key_2: 1: true
+        array: true
+      context.key_2[0].key_2_1.should.eql 'value 2 1, {{key_1}}'
+      context.key_2[1].key_2_2.should.eql 'value 2 2, value 1'
+            
     it 'with compile', ->
       context = templated
         parent: key_1: 'value 1, {{key_3}}'
@@ -143,4 +171,38 @@ describe 'test', ->
       , compile: true, partial: parent: key_1: true
       context.parent.key_1.should.eql 'value 1, value 3, {{key_4}}'
       context.key_2.should.eql 'value 2, {{key_3}}'
-      
+
+  describe 'option array', ->
+    
+    it 'desactivated by default', ->
+      templated
+        key_inject: 'value inject'
+        key_assert: ['{{key_inject}}']
+      .key_assert[0].should.eql '{{key_inject}}'
+    
+    it 'simple element', ->
+      templated
+        key_inject: 'value inject'
+        key_assert: ['{{key_inject}}']
+      ,
+        array: true
+      .key_assert[0].should.eql 'value inject'
+        
+    it 'array in object in array', ->
+      templated
+        key_inject: 'value inject'
+        key_assert: [a: ['{{key_inject}}']]
+      ,
+        array: true
+      .key_assert[0].a[0].should.eql 'value inject'
+        
+    it 'with compile', ->
+      templated
+        key_inject: 'value inject'
+        key_assert: ['{{key_inject}}']
+      ,
+        array: true
+        compile: true
+      .should.eql
+        key_inject: 'value inject'
+        key_assert: [ 'value inject' ]
