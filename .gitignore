@@ -1,6 +1,7 @@
 .*
 /node_modules
 yarn.lock
+!.husky
 !.gitignore
 !.npmignore
 !.travis.yml
