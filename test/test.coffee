@@ -49,7 +49,7 @@ describe 'test', ->
   describe 'proxy', ->
     
     it 'set then retrieve values', ->
-      # Note we used to have a bug where getting an object will result to 
+      # Note we used to have a bug where getting an object will result to
       # undefined after it was set
       obj = templated {toto: {}}
       obj.a_string = 'a value'
@@ -101,7 +101,7 @@ describe 'test', ->
       ).should.throw 'Circular Reference: graph is ["key_1"] -> ["key_2"] -> ["key_pivot"] -> ["key_1"]'
 
   describe 'option partial', ->
-        
+  
     it 'root', ->
       context = templated
         key_1: 'value 1, {{key_3}}'

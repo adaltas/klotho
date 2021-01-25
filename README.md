@@ -35,6 +35,8 @@ first argument and optionally an `options` object as second argument.
 
 Options includes:
 
+* `compile` (boolean)   
+  Resolve all the template on creation instead of on-demand, default is `false`.
 * `handlebars` (object)   
   Options passed to HandleBars.
 * `partial` ([string])   
