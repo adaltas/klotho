@@ -49,3 +49,22 @@ describe 'option.mutate', ->
       key_2: '{{keys.key_inject}}'
     source.keys.key_1.should.eql 'value inject'
     source.keys.key_2.should.eql '{{keys.key_inject}}'
+  
+  describe 'get undefined', ->
+    
+    it 'on object', ->
+      source =
+        keys:
+          key_inject: 'value inject'
+          key_assert: '{{keys.key_inject}}'
+      templated source, mutate: true
+      should(source.keys.key_undefined).be.exactly undefined
+    
+    it 'on array', ->
+      source =
+        keys: [
+          'value inject'
+          '{{keys.key_inject}}'
+        ]
+      templated source, mutate: true, array: true
+      should(source.keys[2]).be.exactly undefined
