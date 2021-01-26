@@ -31,24 +31,6 @@ module.exports = (context, options = {}) ->
     value
   # Clone the context by recursively converting it into proxies
   proxify = (source, keys, partial) ->
-    if (Array.isArray(source) and options.array) or is_object_literal(source)
-      # We can both store properties and indexes
-      # This is the same as `proxies = []`
-      proxies = {}
-      # Note, we can both traverse object and array
-      # this is the same as `for value, index in array`
-      for key, value of source
-        continue if partial? and not partial[key]
-        if Array.isArray(value) and options.array
-          proxies[key] = proxify value, [keys..., key], (
-            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
-          )
-        else if is_object_literal value
-          proxies[key] = proxify value, [keys..., key], (
-            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
-          )
-    else
-      throw Error 'Unsupported'
     new Proxy source,
       get: (target, key) ->
         # Retrieve the value from context
@@ -56,16 +38,19 @@ module.exports = (context, options = {}) ->
         # Return value without rendering if key is filtered by partial
         return value if partial? and not partial[key]
         if Array.isArray(value) and options.array
-          proxies[key]
+          proxify value, [keys..., key], (
+            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+          )
         else if is_object_literal value
-          proxies[key]
+          proxify value, [keys..., key], (
+            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+          )
         else if typeof value is 'string'
           _render [keys..., key], value
         else
           value
       # Returned object if modified after being proxyfied
       set: (target, key, value) ->
-        proxies[key] = value
         target[key] = value
         true
   if options.mutate
