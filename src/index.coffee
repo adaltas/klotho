@@ -76,6 +76,7 @@ module.exports = (context, options = {}) ->
       set: (target, key, value) ->
         proxies[key] = value
         target[key] = value
+        true
   proxy = proxify context, [], options.partial
   # Trigger templating on every properties
   init = (search, keys, partial) ->

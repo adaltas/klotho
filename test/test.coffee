@@ -56,6 +56,29 @@ describe 'test', ->
       obj.an_object = {}
       obj.a_string.should.eql 'a value'
       obj.an_object.should.eql {}
+      obj.a_false_value = false
+      obj.toto.a_false_value = false
+      obj.toto = false
+        
+    it 'set element in proxy array', ->
+      ## Fix error
+      # `TypeError: 'set' on proxy: trap returned falsish for property '1'`
+      # when `proxy.set` does not return true
+      obj = templated
+        key_inject: 'value inject'
+        key_assert: [a: ['{{key_inject}}']]
+      ,
+        array: true
+      obj.key_assert.push b: {}
+      obj.key_assert.should.eql [
+        { a: ['{{key_inject}}'] }
+        { b: {} }
+      ]
+      obj.key_assert[0].a.push 'ok'
+      obj.key_assert[0].a.should.eql [
+        '{{key_inject}}'
+        'ok'
+      ]
 
   describe 'inject', ->
 
