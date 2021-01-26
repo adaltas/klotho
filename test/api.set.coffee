@@ -1,6 +1,5 @@
 
 templated = require '../src'
-{merge} = require 'mixme'
 
 describe 'api.set', ->
   
