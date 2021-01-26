@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/adaltas/klotho/compare/v0.1.0...v0.1.1) (2021-01-26)
+
+
+### Bug Fixes
+
+* set element in array ([e4e39c0](https://github.com/adaltas/klotho/commit/e4e39c0c6b31f852d42e0a61109a98b431bf8c45))
+
 ## [0.1.0](https://github.com/adaltas/klotho/compare/v0.0.4...v0.1.0) (2021-01-25)
 
 
