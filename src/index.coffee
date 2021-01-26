@@ -58,7 +58,7 @@ module.exports = (context, options = {}) ->
       if (Array.isArray(value) and options.array) or is_object_literal(value)
         partial = options.partial
         partial = if partial? and is_object_literal(partial[key]) then partial[key] else undefined
-        context[key] = proxify value, [], partial
+        context[key] = proxify value, [key], partial
       else
         context[key] = value
     proxy = context

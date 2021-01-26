@@ -10,8 +10,8 @@ describe 'option.mutate', ->
         key_assert: '{{keys.key_inject}}'
     templated source, mutate: false
     source.keys.key_assert.should.eql '{{keys.key_inject}}'
-      
-  it 'work on the input reference', ->
+  
+  it 'on 1st mutated level', ->
     source =
       keys:
         key_inject: 'value inject'
@@ -21,6 +21,18 @@ describe 'option.mutate', ->
       key_inject: 'value inject'
       key_assert: '{{keys.key_inject}}'
     source.keys.key_assert.should.eql 'value inject'
+  
+  it 'on 2nd mutated level', ->
+    source =
+      root:
+        keys:
+          key_inject: 'value inject'
+          key_assert: '{{root.keys.key_inject}}'
+    templated source, mutate: true
+    source.root.keys.should.eql
+      key_inject: 'value inject'
+      key_assert: '{{root.keys.key_inject}}'
+    source.root.keys.key_assert.should.eql 'value inject'
       
   it 'access twice the same key', ->
     # Note, fix a bug where the rendering only occured the first time
@@ -50,9 +62,20 @@ describe 'option.mutate', ->
     source.keys.key_1.should.eql 'value inject'
     source.keys.key_2.should.eql '{{keys.key_inject}}'
   
-  describe 'get undefined', ->
+  describe 'get', ->
+
+    it 'undefined on array', ->
+      source =
+        root:
+          keys: [
+            'value inject'
+            'got {{root.keys.[0]}}'
+          ]
+      templated source, mutate: true, array: true
+      source.root.keys[0].should.eql 'value inject'
+      source.root.keys[1].should.eql 'got value inject'
     
-    it 'on object', ->
+    it 'undefined on object', ->
       source =
         keys:
           key_inject: 'value inject'
@@ -60,7 +83,7 @@ describe 'option.mutate', ->
       templated source, mutate: true
       should(source.keys.key_undefined).be.exactly undefined
     
-    it 'on array', ->
+    it 'undefined on array', ->
       source =
         keys: [
           'value inject'
