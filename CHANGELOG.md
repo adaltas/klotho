@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/adaltas/klotho/compare/v0.1.1...v0.2.0) (2021-01-26)
+
+
+### Features
+
+* new mutate option ([526e0f7](https://github.com/adaltas/klotho/commit/526e0f777aa549ef1e72a15b64a407228f378641))
+
+
+### Bug Fixes
+
+* deep level reference with mutate ([e3699f5](https://github.com/adaltas/klotho/commit/e3699f5455e4eab8b02c4eedd5d98dda278941ab))
+
 ### [0.1.1](https://github.com/adaltas/klotho/compare/v0.1.0...v0.1.1) (2021-01-26)
 
 
