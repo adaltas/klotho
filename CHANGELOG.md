@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/adaltas/klotho/compare/v0.2.0...v0.2.1) (2021-01-27)
+
+
+### Bug Fixes
+
+* move dependencies into dev ([94023f3](https://github.com/adaltas/klotho/commit/94023f34d98774317719dc1432ec9063bc104de1))
+
 ## [0.2.0](https://github.com/adaltas/klotho/compare/v0.1.1...v0.2.0) (2021-01-26)
 
 
