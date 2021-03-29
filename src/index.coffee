@@ -37,11 +37,7 @@ module.exports = (context, options = {}) ->
         value = target[key]
         # Return value without rendering if key is filtered by partial
         return value if partial? and not partial[key]
-        if options.array and Array.isArray(value)
-          proxify value, [keys..., key], (
-            if partial? and is_object_literal(partial[key]) then partial[key] else undefined
-          )
-        else if is_object_literal value
+        if (options.array and Array.isArray(value)) or is_object_literal(value)
           proxify value, [keys..., key], (
             if partial? and is_object_literal(partial[key]) then partial[key] else undefined
           )
