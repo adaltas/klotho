@@ -65,21 +65,20 @@ module.exports = (context, options = {}) ->
   else
     proxy = proxify context, [], options.partial
   # Trigger templating on every properties
-  init = (search, keys, partial) ->
+  compile = (search, keys, partial) ->
     for key, value of search
       continue if partial? and not partial[key]
       # String interpreted as a template
       if typeof value is 'string'
         _render [keys..., key], value
-      else
-        # Note, array goes here as well and call `init` with the full array
-        # init then loop through the array with `for` resulting
+      else if is_object_literal value
+        # Note, array goes here as well and call `compile` with the full array
+        # compile then loop through the array with `for` resulting
         # in the key as the index converted to a string
-        init search[key], [keys..., key], (
-          if partial? and is_object_literal partial[key] then partial[key] else undefined
-        )
+        partial = if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+        compile search[key], [keys..., key], partial
   if options.compile
-    init context, [], options.partial
+    compile context, [], options.partial
     return context
   # Return the result
   proxy
