@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/adaltas/klotho/compare/v0.2.1...v0.2.2) (2021-03-29)
+
+
+### Features
+
+* compile disregard non literal objects ([f70d65b](https://github.com/adaltas/klotho/commit/f70d65b9f0bfe1519408874c254bc0956671194d))
+
+
+### Bug Fixes
+
+* partial variable overwritten in compile ([07d4c74](https://github.com/adaltas/klotho/commit/07d4c746c5eedac6cad7c9fef66196b907d37a60))
+* skip partial mutations in root level ([aaf3726](https://github.com/adaltas/klotho/commit/aaf3726222dc037f29e0411ad8ac0ae75688dfd3))
+
 ### [0.2.1](https://github.com/adaltas/klotho/compare/v0.2.0...v0.2.1) (2021-01-27)
 
 
