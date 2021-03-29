@@ -37,7 +37,7 @@ module.exports = (context, options = {}) ->
         value = target[key]
         # Return value without rendering if key is filtered by partial
         return value if partial? and not partial[key]
-        if Array.isArray(value) and options.array
+        if options.array and Array.isArray(value)
           proxify value, [keys..., key], (
             if partial? and is_object_literal(partial[key]) then partial[key] else undefined
           )
@@ -55,7 +55,7 @@ module.exports = (context, options = {}) ->
         true
   if options.mutate
     for key, value of context
-      if (Array.isArray(value) and options.array) or is_object_literal(value)
+      if (options.array and Array.isArray(value)) or is_object_literal(value)
         partial = options.partial
         partial = if partial? and is_object_literal(partial[key]) then partial[key] else undefined
         context[key] = proxify value, [key], partial
@@ -71,12 +71,12 @@ module.exports = (context, options = {}) ->
       # String interpreted as a template
       if typeof value is 'string'
         _render [keys..., key], value
-      else if is_object_literal value
+      else if (options.array and Array.isArray(value)) or is_object_literal value
         # Note, array goes here as well and call `compile` with the full array
         # compile then loop through the array with `for` resulting
         # in the key as the index converted to a string
-        partial = if partial? and is_object_literal(partial[key]) then partial[key] else undefined
-        compile search[key], [keys..., key], partial
+        childPartial = if partial? and is_object_literal(partial[key]) then partial[key] else undefined
+        compile search[key], [keys..., key], childPartial
   if options.compile
     compile context, [], options.partial
     return context
