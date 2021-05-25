@@ -8,7 +8,7 @@ If this is not clear, imagine a templating engine rendering all the string of an
 
 If this is still not clear, imagine a configuration where each value can referenced other values from that same configuration, see the example below.
 
-If you have understood but a more sarrow introduction would have helped, please [share your suggestions](https://github.com/adaltas/node-templated-object/edit/master/README.md).
+If you have understood but a more sarrow introduction would have helped, please [share your suggestions](https://github.com/adaltas/self-templated/edit/master/README.md).
 
 This package features:
 
